@@ -2,17 +2,30 @@
 
 import { ReactNode } from "react";
 
-interface ButtonProps {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
+  variant?: "primary" | "secondary" | "ghost" | "outline";
   className?: string;
-  appName: string;
+  appName?: string; // Opt-in if needed, but keeping it flexible
 }
 
-export const Button = ({ children, className, appName }: ButtonProps) => {
+export const Button = ({ 
+  children, 
+  className = "", 
+  variant = "primary", 
+  appName, 
+  ...props 
+}: ButtonProps) => {
+  const variantClass = `btn-${variant}`;
+
   return (
     <button
-      className={className}
-      onClick={() => alert(`Hello from your ${appName} app!`)}
+      className={`btn ${variantClass} ${className}`}
+      onClick={(e) => {
+        if (appName) alert(`Hello from your ${appName} app!`);
+        props.onClick?.(e);
+      }}
+      {...props}
     >
       {children}
     </button>

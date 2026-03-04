@@ -1,135 +1,92 @@
-# Turborepo starter
+# Twitzie - AI Tweet Enhancer 🚀
 
-This Turborepo starter is maintained by the Turborepo core team.
+Twitzie is a powerful, AI-driven web application designed to help you create more engaging, clear, and impactful tweets. Built with a modern dark-theme aesthetic, it uses Google's Gemini AI to analyze and optimize your social media content perfectly tailored to your desired tone and length.
 
-## Using this example
+## 🌟 Features
 
-Run the following command:
+- **AI-Powered Enhancements**: Utilizes Gemini 1.5 Flash to automatically rewrite and improve tweets.
+- **Customizable Output**: Choose the tone (Professional, Casual, Funny, etc.) and length of your generated tweets.
+- **Beautiful UI/UX**: A sleek, dark-themed interface built for a premium user experience.
+- **History Dashboard**: A dedicated dashboard to view all your previously enhanced tweets.
+- **Secure Authentication**: Integrated with NextAuth for seamless Google and GitHub login.
+- **Modern Monorepo Architecture**: Structured using Turborepo for fast, scalable development.
 
-```sh
-npx create-turbo@latest
-```
+## 🛠️ Tech Stack
 
-## What's inside?
+- **Framework:** [Next.js](https://nextjs.org/) (App Router)
+- **Styling:** Custom CSS with dark theme emphasis
+- **Database:** PostgreSQL (Neon DB)
+- **ORM:** [Prisma](https://www.prisma.io/)
+- **Authentication:** [NextAuth.js](https://next-auth.js.org/)
+- **AI Integration:** Google Gemini AI
+- **Monorepo Management:** [Turborepo](https://turbo.build/)
 
-This Turborepo includes the following packages/apps:
+## 🏗️ Project Structure
 
-### Apps and Packages
+This project uses Turborepo. It consists of the following workspaces:
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- `apps/web`: The main Next.js web application.
+- `packages/db`: Prisma database configurations and generated client.
+- `packages/ui`: Shared React components (if applicable).
+- `packages/eslint-config`: Shared `eslint` configurations.
+- `packages/typescript-config`: Shared `tsconfig.json`s used throughout the monorepo.
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+## 💻 Getting Started
 
-### Utilities
+### Prerequisites
 
-This Turborepo has some additional tools already setup for you:
+Ensure you have the following installed on your machine:
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+- Node.js (v18 or higher)
+- npm (v10 or higher)
+- A PostgreSQL database (e.g., Neon, Supabase, or local)
+- A Google Gemini API Key
 
-### Build
+### Installation
 
-To build all apps and packages, run the following command:
+1. **Clone the repository:**
 
-```
-cd my-turborepo
+   ```bash
+   git clone <your-repo-url>
+   cd twitzie
+   ```
 
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
+2. **Install dependencies:**
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
-```
+   ```bash
+   npm install
+   ```
 
-You can build a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+3. **Set up environment variables:**
+   You will need to set up environment variables in both the `web` and `db` packages.
+   Template files (`.env.example`) have been provided in the respective directories.
+   - Copy `apps/web/.env.example` to `apps/web/.env` and fill in your authentication and AI keys.
+   - Copy `packages/db/.env.example` to `packages/db/.env` and add your database connection string.
 
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+4. **Initialize the database:**
+   Deploy the Prisma schema to your database and generate the Prisma Client.
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+   ```bash
+   npm run db:deploy --workspace=@repo/db
+   npm run db:generate --workspace=@repo/db
+   ```
 
-### Develop
+   _(Alternatively, run `npx turbo run db:generate` from the root)_
 
-To develop all apps and packages, run the following command:
+5. **Start the development server:**
 
-```
-cd my-turborepo
+   ```bash
+   npm run dev
+   ```
 
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
+6. **Open the app:**
+   Visit [http://localhost:3000](http://localhost:3000) in your browser.
 
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
+## 📜 Scripts
 
-You can develop a specific package by using a [filter](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters):
+Useful commands you can run from the root of the project:
 
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
-```
-
-### Remote Caching
-
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.dev/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.dev/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.dev/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.dev/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.dev/docs/reference/configuration)
-- [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+- `npm run dev`: Starts the development servers for all apps.
+- `npm run build`: Builds all apps and packages for production.
+- `npm run lint`: Lints all workspaces.
+- `npm run check-types`: Runs TypeScript type checking across the project.
